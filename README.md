@@ -123,7 +123,7 @@ flowchart TD
 | 37 | [Docker](./37-Docker) | Images, multi-stage builds, Compose |
 | 38 | [CI/CD](./38-CI-CD) | GitHub Actions pipelines |
 | 39 | [Azure/Cloud](./39-Azure) | App Service, Functions, Key Vault, managed identity |
-| 40 | [Projects](./40-Projects) | Warehouse Management System (capstone) |
+| 40 | [Projects](./40-Projects) | 6 buildable, tested projects — Calculator → Employee Mgmt → Web API → E-Commerce API → WMS capstone → Microservices |
 | — | [Interview Preparation](./Interview-Preparation) | Junior/Mid/Senior questions per topic |
 | — | [Cheat Sheets](./Cheat-Sheets) | One-page comparison tables |
 | — | [Exercises](./Exercises) | Easy/Medium/Hard drills per module |
