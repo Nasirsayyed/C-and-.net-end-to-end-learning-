@@ -10,6 +10,8 @@
 ## ❓ Why do we need it?
 Manual build/test/deploy processes are slow, inconsistent, and error-prone (a step forgotten under deadline pressure). Automating the pipeline makes every change go through the exact same verification and deployment steps, every time, catching regressions before they reach users.
 
+> 📎 **This repository has a real, working CI pipeline**: [`.github/workflows/ci.yml`](../.github/workflows/ci.yml) discovers every `.sln` under [`40-Projects/`](../40-Projects) and runs `restore` → `build` → `test` on each, in a matrix, on every push and PR. It's the restore/build/test portion of the example below, not a hypothetical snippet — read it alongside this module.
+
 ## 🧠 Core Concept — Pipeline stages
 
 ```mermaid

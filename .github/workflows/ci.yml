@@ -1,0 +1,58 @@
+name: CI
+
+# Builds and tests every .NET solution under 40-Projects/ on every push and PR.
+# See module 38-CI-CD for the reasoning behind this pipeline's structure: restore →
+# build → test, failing fast at whichever stage breaks first.
+on:
+  push:
+    branches: [main, master, "claude/**"]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    outputs:
+      solutions: ${{ steps.find.outputs.solutions }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Find all solutions under 40-Projects
+        id: find
+        run: |
+          SOLUTIONS=$(find 40-Projects -name "*.sln" | sort | jq -R -s -c 'split("\n") | map(select(length > 0))')
+          echo "solutions=$SOLUTIONS" >> "$GITHUB_OUTPUT"
+          echo "Found solutions: $SOLUTIONS"
+
+  build-and-test:
+    needs: discover
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        solution: ${{ fromJson(needs.discover.outputs.solutions) }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Restore
+        run: dotnet restore "${{ matrix.solution }}"
+
+      - name: Build
+        run: dotnet build "${{ matrix.solution }}" --no-restore -c Release
+
+      - name: Test
+        run: dotnet test "${{ matrix.solution }}" --no-build -c Release --logger "trx" --results-directory TestResults
+
+      - name: Publish test results
+        if: always()
+        uses: dorny/test-reporter@v1
+        with:
+          name: "Test Results — ${{ matrix.solution }}"
+          path: "TestResults/*.trx"
+          reporter: dotnet-trx
