@@ -18,6 +18,11 @@ TestResults/
 *.nupkg
 .nuget/
 
+# Local SQLite databases created by running sample projects
+*.db
+*.db-shm
+*.db-wal
+
 # OS
 .DS_Store
 Thumbs.db
